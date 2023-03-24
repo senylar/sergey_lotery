@@ -3,6 +3,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils import executor
+from datetime import datetime as dt
 
 bot = Bot(token='6177906462:AAE4QbSASTkNdDM_BdcI1CfG_E0up4OSjQs')
 dp = Dispatcher(bot)
@@ -20,8 +21,11 @@ bet = False
 #проводиться ли сейчас регистрация?
 req = False
 
+fuc = False
 #словарь с никами пользователями id: ник
 name_dict = {}
+
+fu_list = {}
 
 
 coef = 0.5
@@ -152,6 +156,35 @@ async def ball(msg):
         print(us_ball[id])
         await bot.send_message(msg.chat.id,us_ball[id])
 
+@dp.message_handler(commands=["fuck_u"])
+async def fuck(msg):
+    global fuc
+    await bot.send_message(msg.chat.id,"Кого ты хочешь послать?")
+    fuc = True
+
+@dp.message_handler(commands=["hu_fucked"])
+async def fuck(msg):
+    global fu_list
+
+    out = "Вот топ тех кого послали:\n"
+    fu_list_st = sorted(fu_list, key=fu_list.get)
+    fu_list_st.reverse()
+    print(fu_list_st)
+    le = 0
+    for m_key in fu_list_st:
+        if le == 5:
+            break
+
+        x = fu_list_st.index(m_key)
+        out += f"{x + 1}. {m_key} послали {fu_list[m_key]} раз(а)\n"
+        le += 1
+
+
+    await bot.send_message(msg.chat.id, out)
+
+
+
+
 @dp.message_handler(commands=["statistics"])
 async def ball(msg):
     out = "Топ по баллансу:\n"
@@ -213,7 +246,12 @@ async def echo_message(msg):
     global bet
     global set_c
     global coef
+    global fuc
+
+
     if msg.text == "Сделать ставку":
+
+
         bet = True
         global req
         global name_dict
@@ -270,6 +308,24 @@ async def echo_message(msg):
                 await bot.send_message(msg.chat.id,"Недостаточно средств(((")
         else:
             await bot.send_message(msg.chat.id, "Недостаточно средств(((")
+    elif fuc:
+        us_name = msg.text.lower()
+
+        if us_name in fu_list.keys():
+
+            fu_list[us_name] += 1
+
+            await bot.send_message(msg.chat.id, f"Отлично, его послали нахуй вот столько раз: {fu_list[us_name]}")
+
+        else:
+            fu_list[us_name] = 1
+
+            await bot.send_message(msg.chat.id, f"Отлично, ты первый кто послал его нахуй")
+
+        fuc = False
+
+
+
 
 
 

@@ -24,3 +24,27 @@ name_dict = {
            149378047: "lol",
            149378048: "kek",
            149378049: "hu"}
+
+
+fu_list = {"1": 4,
+           "2": 2,
+           "3":1}
+def fuck():
+    global fu_list
+
+    out = "Топ по баллансу:\n"
+
+    fu_list_st = sorted(us_ball, key=us_ball.get)
+    fu_list_st.reverse()
+    print(fu_list)
+
+    for m_key in fu_list_st:
+        x = fu_list_st.index(m_key)
+        out += f"{x + 1}. {name_dict[m_key]}: {us_ball[m_key]}. {us_stat[m_key][0]} побед, и {us_stat[m_key][1]} поражений\n"
+
+    out += ".............................\n"
+
+    out += f"Твоё место: {fu_list_st.index(n) + 1} {name_dict[n]}: {us_ball[msg.chat.id]}. {us_stat[msg.chat.id][0]} побед, и {us_stat[msg.chat.id][1]} поражений\n"
+    #
+    # for i in range(4):
+    #     out += out_l[i]
